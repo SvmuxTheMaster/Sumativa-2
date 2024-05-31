@@ -65,10 +65,10 @@
             <p>Registrate y seras parte de una gran comunidad ademas de contar con nuestras ultimas
                 novedades en comics, ofertas especiales, concursos y mucho mas.</p>
             <img src="./assets/img/brandRegistrate.jpg">
-            <form>
+            <form id="formLogin">
                 <div class="mb-3">
                     <label for="rut" class="form-label">RUT:</label>
-                    <input type="text" class="form-control" id="rut" required>
+                    <input type="text" class="form-control" id="rut" placeholder="Ej:12345678-9">
                 </div>
                 <div class="mb-3">
                     <label for="nombre" class="form-label">Nombre:</label>
@@ -87,8 +87,10 @@
                     <input type="password" class="form-control" id="contraseña" required>
                 </div>
                 <div class="d-flex justify-content-center">
-                    <a href="./inicio.html" class="btn btn-primary">Registrar</a>
+                    <input type="submit" id="btnIngresar" value="Registrar" class="boton" href="./inicio.html">
                 </div>
+                <br>
+                <p id="error" style=" color: white; text-align: center;"></p>
             </form>
         </div>
     </div>
@@ -106,7 +108,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous">
+    </script>
+    <script type="module" src="./assets/js/validacionRegistro.js"></script>
 </body>
 
 </html>
