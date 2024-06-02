@@ -1,54 +1,66 @@
-const Clickbutton = document.querySelectorAll('.button')
-const tbody = document.querySelector('#tbody')
-let carrito = []
+document.addEventListener('DOMContentLoaded', () => {
+  const addToCartButtons = document.querySelectorAll('.add-to-cart');
+  const cartContainer = document.getElementById('cart-container');
 
-Clickbutton.forEach(btn => {
-    btn.addEventListener('click', addToCarritoItem)
+  addToCartButtons.forEach(button => {
+      button.addEventListener('click', () => {
+          const title = button.getAttribute('data-title');
+          const price = button.getAttribute('data-price');
+
+          let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+
+          const itemIndex = cartItems.findIndex(item => item.title === title);
+          if (itemIndex !== -1) {
+              cartItems[itemIndex].quantity += 1;
+          } else {
+              cartItems.push({ title, price, quantity: 1 });
+          }
+
+          localStorage.setItem('cartItems', JSON.stringify(cartItems));
+          updateCartUI();
+          alert(`${title} añadido al carrito`);
+      });
+  });
+
+  function updateCartUI() {
+      let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+
+      if (cartItems.length === 0) {
+          cartContainer.innerHTML = '<p>No hay productos agregados</p>';
+      } else {
+          let cartHTML = '';
+          cartItems.forEach(item => {
+              cartHTML += `
+                  <div class="cart-item">
+                      <p>${item.title} - $${item.price} - Cantidad: ${item.quantity}</p>
+                      <button class="btn btn-danger remove-from-cart" data-title="${item.title}">Eliminar</button>
+                  </div>
+              `;
+          });
+          cartContainer.innerHTML = cartHTML;
+
+          const removeButtons = document.querySelectorAll('.remove-from-cart');
+          removeButtons.forEach(button => {
+              button.addEventListener('click', () => {
+                  const title = button.getAttribute('data-title');
+                  cartItems = cartItems.filter(item => item.title !== title);
+                  localStorage.setItem('cartItems', JSON.stringify(cartItems));
+                  updateCartUI();
+              });
+          });
+      }
+  }
+
+  // La llamada a updateCartUI se mueve aquí
+  updateCartUI();
 });
 
-function addToCarritoItem(e) {
-    const button = e.target
-    const item = button.closest('.card')
-    const itemTitle = item.querySelector('.card-title').textContent;
-    const itemPrice = item.querySelector('.precio').textContent;
-    const itemImg = item.querySelector('.img-fluid').src;
-
-    const newItem = {
-        title: itemTitle,
-        precio: itemPrice,
-        img: itemImg,
-        cantidad: 1
-    }
-
-    addItemCarrito(newItem)
+function limpiar(){
+  localStorage.removeItem("cartItems");
 }
 
-function addItemCarrito(newItem) {
-
-    carrito.push(newItem);
-    renderCarrito();
-}
-
-function renderCarrito(){
-  tbody.innerHTML = '';
-  carrito.map(item => {
-    const tr = document.createElement('tr')
-    tr.classList.add('ItemCarrito')
-    const Content = `
-    
-    <th scope="row">1</th>
-            <td class="table__productos">
-              <img src=${item.img}  alt="">
-              <h6 class="title">${item.title}</h6>
-            </td>
-            <td class="table__price"><p>${item.precio}</p></td>
-            <td class="table__cantidad">
-              <input type="number" min="1" value=${item.cantidad} class="input__elemento">
-              <button class="delete btn btn-danger">x</button>
-            </td>
-    
-    `
-    tr.innerHTML = Content;
-    tbody.append(tr);
-    })
+function comprar(){
+  alert("¡COMPRA REALIZADA EXITOSAMENTE!");
+  limpiar();
+  window.location.href = ("inicio.html");
 }
